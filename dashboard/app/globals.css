@@ -1,0 +1,60 @@
+:root {
+  --bg: #080C14;
+  --text-primary: #E2E8F4;
+  --text-muted: #6B7FA3;
+  --accent: #00C2FF;
+  --border: #1A2540;
+  --error: #FF4D4D;
+  --font-mono: "IBM Plex Mono", monospace;
+  --font-serif: "Instrument Serif", serif;
+  --font-sans: "DM Sans", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 194, 255, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 194, 255, 0.4);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
