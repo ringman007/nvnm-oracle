@@ -4,14 +4,13 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const supabase = getSupabaseAdmin();
-  const { data: stats, error } = await supabase
-    .from("oracle_stats")
-    .select("*")
-    .single();
 
-  if (error) {
-    return Response.json({ error: error.message }, { status: 500 });
-  }
+  // Get real counts from anchors table
+  const [totalRes, todayRes, lastRunRes] = await Promise.all([
+    supabase.from("anchors").select("id", { count: "exact", head: true }).eq("status", "anchored"),
+    supabase.from("anchors").select("id", { count: "exact", head: true }).eq("status", "anchored").gte("anchored_at", new Date().toISOString().split("T")[0]),
+    supabase.from("anchors").select("anchored_at").order("anchored_at", { ascending: false }).limit(1),
+  ]);
 
   // Fetch current block number from NVNM RPC
   let blockNumber = null;
@@ -31,9 +30,9 @@ export async function GET() {
   } catch (_) {}
 
   return Response.json({
-    totalAnchored: stats.total_anchored,
-    anchoredToday: stats.anchored_today,
-    lastRunAt: stats.last_run_at,
+    totalAnchored: totalRes.count || 0,
+    anchoredToday: todayRes.count || 0,
+    lastRunAt: lastRunRes.data?.[0]?.anchored_at || null,
     blockNumber,
   });
 }
